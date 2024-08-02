@@ -1,0 +1,19 @@
+<ion-content [fullscreen]="true" class="ion-padding-horizontal" #page>
+  <div class="fullHeight flex-col-center">
+    <!-- App Content -->
+    <div class="imgContainer ion-margin-vertical">
+      <ion-img src="../../../assets/icon/MyGamingJournal-logo.png"></ion-img>
+    </div>
+    
+    <h1 class="ion-text-center steelBlueColor title">MyGamingJournal</h1>
+    <h4 class="ion-text-center steelBlueColor">
+      Your app to manage and track the games you played or want to play!
+    </h4>
+    
+    <ion-row class="ion-justify-content-center ion-margin-top ion-margin-vertical">
+      <ion-button fill="outline" size="large" (click)="openLoginModal()">Login</ion-button>
+      <ion-button class="steelBlueBackground " size="large" (click)="openRegisterModal()">Register</ion-button>
+    </ion-row>
+  </div>
+</ion-content>
+

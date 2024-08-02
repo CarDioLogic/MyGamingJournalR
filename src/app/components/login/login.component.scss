@@ -1,0 +1,43 @@
+@import '../../../global.scss';
+
+/* content used on its own - safe area to account for phone status bar */
+ion-content::part(scroll) {
+  padding-top: var(--ion-safe-area-top, 0);
+}
+ion-button{
+  --ripple-color: var(--PolynesianBlue);
+   --background-activated: var(--darken10SteelBlue);
+   --box-shadow: 0 2px 6px 0 var(--SteelBlue);
+}
+.orangeActivated{
+  --background-activated: var(--darken10SafetyOrange);
+  --ripple-color: var(--SafetyOrange);
+}
+.steelBlueBackground{
+  --background: var(--SteelBlue);
+}
+.safetyOrangeBackground{
+  --background: var(--SafetyOrange);
+}
+
+.whiteBackground{
+  --background: white;
+}
+.steelBlueColor{
+  color: var(--SteelBlue);
+}
+
+.aliceBlueColor{
+  color: var(--AliceBlue);
+}
+
+.title{
+  font-weight: bold;
+}
+
+.flex-col-center{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

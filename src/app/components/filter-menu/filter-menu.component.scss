@@ -1,0 +1,29 @@
+ion-content {
+  height: 100vh;
+}
+ion-button {
+  --background: var(--SafetyOrange);
+  --background-activated: var(--darken10SafetyOrange);
+}
+ion-select {
+  --button-background: var(--SafetyOrange);
+}
+
+.safetyOrangeBackground {
+  --background: var(--SafetyOrange);
+}
+.aliceBlueColor {
+  color: var(--AliceBlue);
+}
+.toolbar {
+  display: flex;
+  gap: 2em;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+a:active {
+  color: gray;
+}

@@ -1,0 +1,56 @@
+ion-menu::part(backdrop) {
+    background-color:  var(--SafetyOrange);
+  }
+  ion-menu::part(container) {
+    border-radius: 1rem 0 0 1rem;
+    box-shadow: 4px 0px 16px var(--SafetyOrange);
+  }
+  ion-card {
+    --background: var(--AliceBlue);
+    color: var(--SteelBlue);
+  }
+  ion-button {
+      --background: var(--SteelBlue);
+      --background-activated: var(--darken10SteelBlue);
+  
+      --color: var(--AliceBlue);
+    }
+  ion-toolbar {
+    --background: var(--SteelBlue);
+    --color: var(--AliceBlue);
+  }
+  ion-icon {
+      --ionicon-stroke-width: 16px;
+    }
+    ion-searchbar{
+      --background: var(--AliceBlue);
+      --color:var(--SteelBlue);
+      --icon-color:var(--SteelBlue);
+      --clear-button-color:var(--SteelBlue);
+      --cancel-button-color:var(--SteelBlue);
+      --placeholder-color:var(--SteelBlue);
+    }
+  
+  .flex-col-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: start;
+  }
+  .space-between {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .gap1 {
+    display: flex;
+    gap: 1rem;
+  }
+  .whiteColor{
+      color: white;
+  }

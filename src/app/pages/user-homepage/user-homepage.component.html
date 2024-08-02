@@ -1,0 +1,47 @@
+<ion-header translucent="true">
+  <ion-toolbar class="steelBlueBackground" >
+    <ion-title class="aliceBlueColor" >Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding flex-col-center">
+  <form (ngSubmit)="updateUser()" [formGroup]="registrationForm">
+    <div class="flex-col-center">
+      <div class="avatarProfile">
+        <ion-img [src]="imageUrl"></ion-img>
+      </div>
+      <ion-button (click)="openCamera()" slot="end" class="steelBlueBackground">
+        Select a profile image
+      </ion-button>
+    </div>
+
+    <ion-item class="steelBlueColor">
+      <ion-label position="floating">Name</ion-label>
+      <ion-input formControlName="name" type="text" required></ion-input>
+    </ion-item>
+
+    <ion-item class="steelBlueColor">
+      <ion-label position="floating">Email</ion-label>
+      <ion-input formControlName="email" type="email" required></ion-input>
+    </ion-item>
+
+    <ion-item class="steelBlueColor">
+      <ion-label position="floating">Password</ion-label>
+      <ion-input formControlName="password" type="password" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" type="submit" [disabled]="!registrationForm.valid"
+     class="safetyOrangeBackground orangeActivated">
+      Update
+    </ion-button>
+  </form>
+  <ion-button expand="full" type="submit"
+  class="safetyOrangeBackground orangeActivated"  id="open-action-sheet">
+   Delete Account
+ </ion-button>
+ <ion-action-sheet
+ trigger="open-action-sheet"
+ header="Are you sure you want to delete your user?"
+ [buttons]="actionSheetButtons"
+ (didDismiss)="confirmDelete($event)"
+></ion-action-sheet>
+</ion-content>

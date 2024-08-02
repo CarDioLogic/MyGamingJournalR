@@ -1,3 +1,32 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-header *ngIf="isAuth()">
+    <app-user-menu></app-user-menu>
+  </ion-header>
+  <ion-content>
+    <ion-router-outlet> </ion-router-outlet>
+  </ion-content>
+  <ion-footer *ngIf="isAuth()" class="border-radius-top">
+    <ion-tab-bar slot="bottom" class="steelBlueBackground">
+      <ion-tab-button (click)="navigateToAllGames()">
+        <ion-icon name="game-controller-outline"></ion-icon>
+                All
+      </ion-tab-button>
+      <ion-tab-button (click)="navigateToPlayLater()">
+        <ion-icon name="alarm-outline"></ion-icon>
+        Play later
+      </ion-tab-button>
+      <ion-tab-button (click)="navigateToCurrentlyPlaying()">
+        <ion-icon name="caret-forward-outline"></ion-icon>
+        Playing
+      </ion-tab-button>
+      <ion-tab-button (click)="navigateToPlayed()">
+        <ion-icon name="happy-outline"></ion-icon>
+        Played
+      </ion-tab-button>
+      <ion-tab-button (click)="navigateToFinished()">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        Finished
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-footer>
 </ion-app>

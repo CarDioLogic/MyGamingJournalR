@@ -1,0 +1,78 @@
+<ion-menu menuId="first-menu_gameList" side="end" contentId="main-content">
+  <app-filter-menu
+    (orderParameter)="orderGames($event)"
+    (filterParameter)="filterGames($event)"
+  ></app-filter-menu>
+</ion-menu>
+
+<ion-header translucent="true" class="border-radius-bellow">
+  <ion-toolbar class="steelBlueBackground">
+    <ion-title>Games List</ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button menu="first-menu_gameList">
+        <ion-icon
+          name="options-outline"
+          size="large"
+          class="whiteColor"
+        ></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" id="main-content">
+  <ion-item>
+    <ion-searchbar
+      animated="true"
+      placeholder="Search games"
+      show-clear-button="focus"
+      (ionInput)="onSearchInput($event)"
+    ></ion-searchbar>
+  </ion-item>
+
+  @for (item of filteredGames; track $index) {
+  <ion-card class="" [routerLink]="['/game-description', item.id]">
+    <ion-img [src]="item.thumbnail"></ion-img>
+    <ion-card-content>
+      <div class="flex-col-center">
+        <span class="title">{{ item.title }}</span>
+        <div class="space-between">
+          <span class="">Platform: {{ item.platform }}</span>
+          <span class="">RD: {{ item.release_date }}</span>
+        </div>
+        <span>{{ item.genre }}</span>
+      </div>
+    </ion-card-content>
+  </ion-card>
+  <ion-item>
+    <ion-label>Gaming list:</ion-label>
+    <ion-select placeholder="Add" [(ngModel)]="item.currentList">
+      <ion-select-option value="usersListPlayLater">
+        Play later
+      </ion-select-option>
+      <ion-select-option value="usersListCurrentlyPlaying">
+        Playing
+      </ion-select-option>
+      <ion-select-option value="usersListPlayed"> Played </ion-select-option>
+      <ion-select-option value="usersListCompleted">
+        Finished
+      </ion-select-option>
+    </ion-select>
+    <ion-button slot="end" (click)="AddToList(item)">
+      <ion-icon
+        menu="first-menu"
+        name="checkmark-outline"
+        size="large"
+      ></ion-icon>
+    </ion-button>
+  </ion-item>
+  }
+
+  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more data..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

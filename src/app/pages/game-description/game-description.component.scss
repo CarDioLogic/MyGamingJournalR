@@ -1,0 +1,34 @@
+ion-toolbar {
+    --background: var(--SteelBlue);
+    --color: var(--AliceBlue);
+  }
+
+ion-back-button{
+    --color: white;
+    --color-focused:white;
+
+}
+ion-card {
+    --background: var(--AliceBlue);
+    color: var(--SteelBlue);
+  }
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: start;
+  }
+  .space-between {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .flex-col-center {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+/*     justify-content: center;
+    align-items: center; */
+  }
+  .steelBlueColor{
+    color: var(--SteelBlue);
+}

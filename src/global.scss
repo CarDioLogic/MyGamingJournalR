@@ -8,6 +8,71 @@
  * For more information on global stylesheets, visit the documentation:
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
+/* App color palete */
+
+$polynesianBlue: #054a91;
+$steelBlue: #3e7cb1;
+$darken10SteelBlue:  darken($steelBlue, 10%);;
+$vistaBlue: #81a4cd;
+$AliceBlue: #dbe4ee;
+$SafetyOrange: #f17300;
+$darken10SafetyOrange:  darken($SafetyOrange, 10%);;
+$kratosRed: #7A0E1C;
+$emeraldGreen: #28a745;
+
+:root{
+    --PolynesianBlue: #054a91;
+    --SteelBlue: #3e7cb1;
+    --darken10SteelBlue:  #{$darken10SteelBlue};
+    --VistaBlue: #81a4cd;
+    --AliceBlue: #dbe4ee;
+    --SafetyOrange: #f17300;
+    --darken10SafetyOrange: #{$darken10SafetyOrange};
+    --kratosRed: #7A0E1C;
+    --emeraldGreen: #{$emeraldGreen};
+}
+
+h1,h2,h3,h4,h5,h6{
+    margin: 0;
+}
+ion-toolbar, ion-tab-bar {
+    --background: var(--SteelBlue);
+    --color: var(--AliceBlue);
+  }
+  
+
+.border-radius-top{
+  overflow: hidden;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 10px;
+}
+.border-radius-bellow{
+    overflow: hidden;
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 10px;
+}
+/* toast styles */
+.neutral-toast{
+    --background: var(--PolynesianBlue);
+    --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    --color: var(--AliceBlue);
+}
+.success-toast{
+    --background: var(--emeraldGreen);
+    --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    --color: var(--AliceBlue);
+}
+.error-toast{
+    --background: var(--kratosRed);
+    --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    --color: var(--AliceBlue);
+}  
+  .error-toast::part(button), .success-toast::part(button) {
+    border-left: 1px solid var(--AliceBlue);
+    color: var(--AliceBlue);;
+    font-size: 15px;
+  }
+
 
 /* Core CSS required for Ionic components to work properly */
 @import "@ionic/angular/css/core.css";

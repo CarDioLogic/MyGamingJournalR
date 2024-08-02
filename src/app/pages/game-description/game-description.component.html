@@ -1,0 +1,35 @@
+<ion-header translucent="true">
+  <ion-toolbar class="steelBlueBackground">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Game Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="">
+    <ion-img [src]="game.thumbnail"></ion-img>
+    <ion-card-content>
+      <div class="flex-col-center">
+        <div class="space-between">
+          <span class="title">Game: {{ game.title }}</span>
+          <a href="{{game.freetogame_profile_url}}"><ion-icon class="steelBlueColor" size="large" name="arrow-redo-outline"></ion-icon></a>
+        </div>
+        <div>
+          <span>{{game.short_description}}</span>
+        </div>
+
+        <div class="space-between">
+          <span class=""><strong>Platform:</strong> {{ game.platform }}</span>
+          <span class=""><strong>RD:</strong> {{ game.release_date }}</span>
+        </div>
+
+          <span class=""><strong>Publisher:</strong> {{ game.publisher }}</span>
+          <span class=""><strong>Developer:</strong> {{ game.developer }}</span>
+
+        <span><strong>Genre:</strong> {{game.genre}}</span>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

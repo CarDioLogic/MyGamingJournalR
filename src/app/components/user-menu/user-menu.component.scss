@@ -1,0 +1,64 @@
+ion-header {
+  --background: #ffffff; // Cor de fundo do cabeçalho
+  --border-color: #e0e0e0; // Cor da borda
+  --border-width: 1px; // Largura da borda
+}
+
+ion-avatar {
+  --size: 40px; // Tamanho do avatar
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  font-size: 25px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+ion-button {
+  --color: #000; // Cor do ícone
+}
+
+.flex-col-center{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flex-col-end{
+  padding-inline:1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: end;
+}
+.gap-1{
+  display: flex;
+  gap:1rem;
+}
+.stee
+ion-toolbar {
+  --background: var(--SteelBlue);
+  --color: var(--AliceBlue);
+}
+ion-icon{
+  color: white;
+}
+.steelBlueBackground{
+  --background: var(--SteelBlue);
+  --background-activated: var(--darken10SteelBlue);
+
+}
+.whiteColor{
+  --color: white;
+}
+ion-avatar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: var(--SafetyOrange);
+}

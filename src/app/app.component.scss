@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    height: 100vh;         
+  }
+
+  .steelBlueBackground{
+    --background: var(--SteelBlue);
+    --color: var(--AliceBlue);
+  }
+  .space-around{
+    display: flex;
+    justify-content: space-around;
+  }
+  .flex-col{
+    display: flex;
+    flex-direction: column;
+  }
