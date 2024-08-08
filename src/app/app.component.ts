@@ -16,8 +16,7 @@ import {
   IonButtons,
   IonTabs,
   IonTabBar,
-  IonTabButton,
-} from '@ionic/angular/standalone';
+  IonTabButton,  } from '@ionic/angular/standalone';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
@@ -25,7 +24,7 @@ import { Router } from '@angular/router';
   selector: 'app-root',
   templateUrl: 'app.component.html',
   standalone: true,
-  imports: [
+  imports: [ 
     IonTabButton,
     IonTabBar,
     IonTabs,

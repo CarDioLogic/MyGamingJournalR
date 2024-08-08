@@ -39,7 +39,10 @@ ion-toolbar, ion-tab-bar {
     --background: var(--SteelBlue);
     --color: var(--AliceBlue);
   }
-  
+  ion-menu{
+    margin-top: 10em;
+    z-index: 9999;
+  }
 
 .border-radius-top{
   overflow: hidden;
