@@ -27,6 +27,7 @@
       placeholder="Search games"
       show-clear-button="focus"
       (ionInput)="onSearchInput($event)"
+      (keydown.enter)="onSearchEnter()"
     ></ion-searchbar>
   </ion-item>
 
