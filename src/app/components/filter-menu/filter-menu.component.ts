@@ -12,6 +12,7 @@ import { Platform } from 'src/app/models/platform';
 import { Genre } from 'src/app/models/genre';
 import { FilterParams } from 'src/app/models/filterParams';
 import { Route, Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { RawgService } from 'src/app/services/rawg.service';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class FilterMenuComponent  implements OnInit {
   constructor(
     private genreService: GenresService,
     private platformService: PlatformService,
+    private rawgService: RawgService
   ) { }
 
   ngOnInit() {
@@ -68,9 +70,14 @@ export class FilterMenuComponent  implements OnInit {
     this.orderParameter.emit('release_date');
   }
   getPlatforms(){
-    this.platformService.getPlatforms().subscribe({
+    this.rawgService.getPlatforms().subscribe({
       next: (response: any) => {
-        this.platforms = response;
+
+        this.platforms = response.results.map((result: any) => ({
+          id: result.id as string,
+          name: result.name as string,
+        }));
+        
         console.log("Platforms:", this.platforms);
       },
       error: (err) => {
@@ -79,9 +86,12 @@ export class FilterMenuComponent  implements OnInit {
     });
   }
   getGenres(){
-    this.genreService.getGenres().subscribe({
+    this.rawgService.getGenres().subscribe({
       next: (response: any) => {
-        this.genres = response;
+        this.genres = response.results.map((result: any) => ({
+          id: result.id as string,
+          name: result.name as string,
+        }));
         console.log("genres:", this.genres);
       },
       error: (err) => {
@@ -91,9 +101,18 @@ export class FilterMenuComponent  implements OnInit {
   }
 
   emitFilterParams(){
+    if (Array.isArray(this.selectedFilterParams.platform)) {
+      this.selectedFilterParams.platform = this.selectedFilterParams.platform.join(',');
+    }
+
+    if (Array.isArray(this.selectedFilterParams.genre)) {
+      this.selectedFilterParams.genre = this.selectedFilterParams.genre.join(',');
+    }
+
     this.filterParameter.emit(this.selectedFilterParams);
 
   }
+
 }
 
 

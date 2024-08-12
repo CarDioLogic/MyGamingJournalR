@@ -82,16 +82,17 @@ export class GamesListComponent implements OnInit {
   filteredGames: Array<Game> = [];
   filter: FilterParams | undefined;
   searchGameTitleQuery: string | undefined;
-  
+
   GamingList: UserGamingList = {
     id: '',
     userId: '',
     games: [],
   };
 
-  page: number = 1;
-  maxPages: number = 0;
+  page: number = 1; //do i need this ?
+  maxPages: number = 0; //do i need this ?
   itemsPerPage: number = 10;
+  nextPageUrl: string = '';
   user: any;
 
   constructor(
@@ -119,9 +120,9 @@ export class GamesListComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           console.log(response);
-          /*           this.maxPages = response.pages;
-           */
 
+          this.nextPageUrl = response.next;
+          
           this.games = response.results.map((result: any) => ({
             id: result.id as string,
             title: result.name as string,
@@ -148,10 +149,6 @@ export class GamesListComponent implements OnInit {
   }
 
   onIonInfinite(event: any): void {
-    /*     if (this.page >= this.maxPages) {
-      event.target.complete();
-      return;
-    } */
 
     this.page++;
     this.rawgService
@@ -171,16 +168,13 @@ export class GamesListComponent implements OnInit {
           }
 
           console.log(response);
-          /*           this.games.push(...response.data);
-          this.filteredGames.push(...response.data); */
 
           this.games = response.results.map((result: any) => ({
             id: result.id as string,
             title: result.name as string,
             thumbnail: result.background_image as string,
             release_date: result.released as string,
-            /*           genre: result.genre, */
-            /*           platform: result.platform, */
+
           }));
           this.filteredGames.push(...this.games);
 
@@ -188,6 +182,35 @@ export class GamesListComponent implements OnInit {
         },
       });
   }
+
+/*       onIonInfinite(event: any): void {
+        this.rawgService.changePage(this.nextPageUrl).subscribe({
+          next: (response: any) => {
+
+            if (response.next == null) {
+              event.target.complete();
+              return;
+            }
+            this.nextPageUrl = response.next;
+            console.log('nextPage', this.nextPageUrl)
+
+            this.games = response.results.map((result: any) => ({
+              id: result.id as string,
+              title: result.name as string,
+              thumbnail: result.background_image as string,
+              release_date: result.released as string,
+            }));
+            this.filteredGames.push(...this.games);
+      
+            event.target.complete();
+          },
+          error: (err) => {
+            console.error(err);
+            event.target.complete();
+          }
+        });
+      } */
+      
 
   trackByIndex(index: number, item: Game) {
     return index;

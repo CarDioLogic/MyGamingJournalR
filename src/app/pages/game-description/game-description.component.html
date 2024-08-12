@@ -13,22 +13,31 @@
     <ion-card-content>
       <div class="flex-col-center">
         <div class="space-between">
-          <span class="title">Game: {{ game.title }}</span>
-          <a href="{{game.freetogame_profile_url}}"><ion-icon class="steelBlueColor" size="large" name="arrow-redo-outline"></ion-icon></a>
+          <span class="title">{{ game.title }}</span>
+          @if(game.game_url){
+            <a href="{{game.game_url}}"><ion-icon class="steelBlueColor" size="large" name="arrow-redo-outline"></ion-icon></a>
+          }
         </div>
         <div>
           <span>{{game.short_description}}</span>
         </div>
 
         <div class="space-between">
-          <span class=""><strong>Platform:</strong> {{ game.platform }}</span>
           <span class=""><strong>RD:</strong> {{ game.release_date }}</span>
         </div>
+        <span class=""><strong>Platforms:</strong> {{ game.platform }}</span>
+          <span class=""><strong>Publishers:</strong> {{ game.publisher }}</span>
+          <span class=""><strong>Developers:</strong> {{ game.developer }}</span>
 
-          <span class=""><strong>Publisher:</strong> {{ game.publisher }}</span>
-          <span class=""><strong>Developer:</strong> {{ game.developer }}</span>
+        <span><strong>Genres:</strong> {{game.genre}}</span>
+        <span>
+          <strong>Available on:</strong>
+          <span *ngFor="let store of game.store; let i = index">
+            <a href="{{store.storeUrl}}" target="_blank">{{ store.name }}</a>
+            <span *ngIf="i < game.store.length - 1">, </span>
+          </span>
+        </span>
 
-        <span><strong>Genre:</strong> {{game.genre}}</span>
       </div>
     </ion-card-content>
   </ion-card>
