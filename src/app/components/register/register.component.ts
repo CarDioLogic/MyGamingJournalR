@@ -83,14 +83,31 @@ export class RegisterComponent implements OnInit {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+      passwordConfirmation: ['', Validators.required],
       avatar: [''],
     });
   }
-  createUser() {
-    if (this.registrationForm.valid) {
-      const user = this.registrationForm.value;
 
-      this.usersService.createUser(user).subscribe({
+  createUser() {
+    const user = this.registrationForm.value;
+
+    if (this.registrationForm.valid &&
+      user.password === user.passwordConfirmation
+    ) {
+      const formData = new FormData();
+      formData.append('name', user.name);
+      formData.append('email', user.email);
+      formData.append('password', user.password);
+      formData.append('password_confirmation', user.passwordConfirmation);
+  
+      // If the avatar is a base64 string, convert it to a Blob
+      if (user.avatar) {
+        const blob = this.dataURLToBlob(user.avatar);
+        formData.append('profile_image', blob, 'profile_image.jpg');
+      }
+
+
+      this.authService.createUser(formData).subscribe({
         next: (createdUser) => {
           console.log('User created:', createdUser);
           this.cancel();
@@ -108,8 +125,23 @@ export class RegisterComponent implements OnInit {
           this.CreateGamingListsForUser();
         },
       });
+    } else {
+      this.TriggerToast('Passwords must match!', false)
     }
   }
+
+  dataURLToBlob(dataURL: string): Blob {
+    const byteString = atob(dataURL.split(',')[1]);
+    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  }
+
+
   async TriggerToast(toastMessage: string, isToastSuccess: boolean | null) {
     let toastCssClass = '';
     if (isToastSuccess === true) {

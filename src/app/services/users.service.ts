@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError  } from 'rxjs';
 import { catchError, switchMap, tap, map } from 'rxjs/operators';
 import { User } from '../models/user';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-  API_URL = 'http://localhost:3000'
+  API_URL = environment.MyGamingJournalApiUrl;
   
   constructor(private http: HttpClient) { }
 
@@ -26,7 +28,10 @@ export class UsersService {
   getUsersPaginate(page:number, perPage:number): Observable<any>{
     return this.http.get<any>(`${this.API_URL}/users?_page=${page}&_per_page${perPage}`)
   }
-  createUser(user: User): Observable<User> {
+
+
+
+/*   createUser(user: User): Observable<User> {
     localStorage.removeItem('user');
 
     return this.checkUserExists(user.name, user.email).pipe(
@@ -45,9 +50,9 @@ export class UsersService {
         return throwError(error);
       })
     );
-  }
+  } */
 
-  
+
   editUser( userId:string, user:any,): Observable<any>{
     localStorage.removeItem('user');
     localStorage.setItem('user', JSON.stringify({ id: user.id, name: user.name, avatar: user.avatar }));

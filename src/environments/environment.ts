@@ -3,8 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  rawgApiKey: '2ce5438dc3e24d94bf5fb6d961b8c388'
+  production: true,
+  rawgApiKey: '2ce5438dc3e24d94bf5fb6d961b8c388',
+  MyGamingJournalApiUrl: 'http://127.0.0.1:8000'
 };
 
 /*

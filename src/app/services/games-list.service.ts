@@ -4,18 +4,22 @@ import { Observable, throwError  } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { Game } from '../models/game';
 import { UserGamingList } from '../models/userGamingList';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class GamesListService {
-  API_URL = 'http://localhost:3000'
+  //global games in the MyGamingJournal database
+  API_URL = environment.MyGamingJournalApiUrl;
   
   constructor(private http: HttpClient) { }
 
   getGames(): Observable<Array<Game>>{
     return this.http.get<Array<Game>>(`${this.API_URL}/gamesList`)
   }
+
   getGamesById(gameId:string): Observable<any>{
     return this.http.get<any>(`${this.API_URL}/gamesList/${gameId}`)
   }
