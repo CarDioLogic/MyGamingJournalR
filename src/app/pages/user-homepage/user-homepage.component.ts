@@ -27,6 +27,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { UserGamingList } from 'src/app/models/userGamingList';
 import { GamesListService } from 'src/app/services/games-list.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   standalone: true,
@@ -52,6 +53,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./user-homepage.component.scss'],
 })
 export class UserHomepageComponent implements OnInit {
+  myGamingJournalApiUrl = environment.MyGamingJournalApiUrl;
   registrationForm!: FormGroup;
   imageUrl: string = '../../../assets/icon/profileIcon.png'; // Default image
   user: any = '';
@@ -98,9 +100,9 @@ export class UserHomepageComponent implements OnInit {
   }
 
   deleteUser(){
-    this.usersService.deleteUser(this.userId).subscribe({
+    this.authService.deleteUser(this.userId).subscribe({
       next: (result:any) => {
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         this.router.navigate(['./home']);
         this.TriggerToast('User deleted!', true);
 
@@ -117,34 +119,70 @@ export class UserHomepageComponent implements OnInit {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+      passwordConfirmation: ['', Validators.required],
       avatar: ['']
     });
   }
 
   updateUser() {
-    if (this.registrationForm.valid) {
-      const user = this.registrationForm.value;
-      user.id = this.userId;
-      this.usersService.editUser(this.userId, user).subscribe({
-        next: (userUpdated) => {
-          console.log('User updated:', userUpdated);
+    const user = this.registrationForm.value;
+
+    if (this.registrationForm.valid &&
+      user.password === user.passwordConfirmation
+    ) {
+      const formData = new FormData();
+      formData.append('name', user.name);
+      formData.append('email', user.email);
+      formData.append('password', user.password);
+      formData.append('password_confirmation', user.passwordConfirmation);
+
+      console.log("dadaa",user);
+
+      // If the avatar is a base64 string, convert it to a Blob
+      if (user.avatar && this.isImageChanged(user.avatar)
+      ) {
+        const blob = this.dataURLToBlob(user.avatar);
+        formData.append('profile_image', blob, 'profile_image.jpg');
+      }
+      console.log('User updated:', formData);
+
+      this.authService.updateUser(user.id, formData).subscribe({
+        next: (updatedUser) => {
+          console.log('User updated:', formData);
           this.cancel();
           this.router.navigate(['./games-list']);
           window.location.reload(); 
+
         },
         error: (error) => {
-          console.error('Error updating user:', error);
+          console.error('Error creating user:', error);
           this.TriggerToast('Error updating user!', false);
-        }
+        },
+        complete: () => {
+        },
       });
+
+    } else {
+      this.TriggerToast('Passwords must match!', false)
     }
+  }
+  dataURLToBlob(dataURL: string): Blob {
+    const byteString = atob(dataURL.split(',')[1]);
+    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
   }
 
   getUser() {
-    return this.usersService.getUsersById(this.userId).subscribe({
-      next: (user) => {
-        console.log('User:', user);
-        this.user = user;
+    return this.authService.getUser(this.userId).subscribe({
+      next: (response) => {
+
+        this.user = response.data.user;
+        console.log('User:', this.user);
         this.populateFormWithUserData();
       },
       error: (error) => {
@@ -160,9 +198,11 @@ export class UserHomepageComponent implements OnInit {
         id: this.user.id,
         name: this.user.name,
         email: this.user.email,
-        avatar: this.user.avatar || this.imageUrl
+/*         password: this.user.password,
+        password_confirmation: this.user.password, */
+        avatar: (this.myGamingJournalApiUrl + this.user.profile_image) || this.imageUrl
       });
-      this.imageUrl = this.user.avatar || this.imageUrl;
+      this.imageUrl = this.myGamingJournalApiUrl + this.user.profile_image || this.imageUrl;
     }
   }
 
@@ -205,5 +245,17 @@ export class UserHomepageComponent implements OnInit {
       this.registrationForm.controls['avatar'].setValue(this.imageUrl);
     };
     takePicture();
+  }
+
+  isImageChanged(currentImage:string){
+    const userJson = sessionStorage.getItem('user');
+
+    if (userJson) {
+      const userOnDb = JSON.parse(userJson);
+      const profileImageOnDb = userOnDb.profile_image;
+    
+      return currentImage != profileImageOnDb ? true : false;
+    }
+    return false;
   }
 }

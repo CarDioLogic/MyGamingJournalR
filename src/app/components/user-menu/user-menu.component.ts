@@ -26,7 +26,6 @@ export class UserMenuComponent implements OnInit {
 
   ngOnInit() {
     this.user = this.authService.getLoggedInUser();
-    console.log('user in logeed:', this.user)
   }
 
   openSettings() {

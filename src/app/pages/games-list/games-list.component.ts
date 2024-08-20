@@ -128,12 +128,12 @@ export class GamesListComponent implements OnInit {
             title: result.name as string,
             thumbnail: result.background_image as string,
             release_date: result.released as string,
-            /*           genre: result.genre, */
-            /*           platform: result.platform, */
+            genres: result.genres.map((genreObj: any) => genreObj.name) , 
+            platforms: result.platforms.map((platformObj: any) => platformObj.platform.name) ,  
           }));
 
           this.filteredGames = [...this.games];
-          console.log(this.games);
+          console.log(response);
         },
         error: (err) => {
           console.error('Error loading games', err);
@@ -258,13 +258,17 @@ export class GamesListComponent implements OnInit {
   }
 
   async AddToList(game: Game) {
+    console.log("game to add to list",game);
+
+    let gameToAddToList = {
+
+    };
+
     if (!game.currentList) {
       this.TriggerToast(`No list selected`, false);
       return;
     }
 
-    await this.removeGameFromAllLists(game);
-    await this.getUserGamesList(game);
 
     const gameExists = this.GamingList.games.some(
       (existingGame) => existingGame.gameId === game.id
@@ -295,18 +299,7 @@ export class GamesListComponent implements OnInit {
     }
   }
 
-  async getUserGamesList(game: Game): Promise<void> {
-    try {
-      const response = await this.gamesService
-        .getUserGamesListByUserId(this.user.id, game.currentList)
-        .toPromise();
-      this.GamingList = response[0];
-      console.log('User', this.user, 'User gaming list:', this.GamingList);
-    } catch (error) {
-      console.log('Error getting user gaming list!', error);
-      throw error;
-    }
-  }
+
 
   async TriggerToast(toastMessage: string, isToastSuccess: boolean | null) {
     let toastCssClass = '';
@@ -334,15 +327,5 @@ export class GamesListComponent implements OnInit {
   }
 
 
-  removeGameFromAllLists(game: Game) {
-    this.gamesService
-      .removeGameFromAllLists(game.id, this.GamingList.userId)
-      .then(() => {
-        console.log('Game removed successfully from all lists.');
-        console.log(game.id, this.GamingList.userId);
-      })
-      .catch(() => {
-        console.error('Error removing game from all lists.');
-      });
-  }
+
 }

@@ -25,11 +25,11 @@
         <div class="space-between">
           <span class=""><strong>RD:</strong> {{ game.release_date }}</span>
         </div>
-        <span class=""><strong>Platforms:</strong> {{ game.platform }}</span>
-          <span class=""><strong>Publishers:</strong> {{ game.publisher }}</span>
-          <span class=""><strong>Developers:</strong> {{ game.developer }}</span>
+        <span class=""><strong>Platforms:</strong> {{ game.platforms?.join(', ') }}</span>
+          <span class=""><strong>Publishers:</strong> {{ game.publishers?.join(', ') }}</span>
+          <span class=""><strong>Developers:</strong> {{ game.developers?.join(', ') }}</span>
 
-        <span><strong>Genres:</strong> {{game.genre}}</span>
+        <span><strong>Genres:</strong> {{game.genres?.join(', ')}}</span>
         <span>
           <strong>Available on:</strong>
           <span *ngFor="let store of game.store; let i = index">
@@ -41,4 +41,26 @@
       </div>
     </ion-card-content>
   </ion-card>
+  <ion-item>
+    <ion-label>Gaming list:</ion-label>
+    <ion-select placeholder="Add" [(ngModel)]="game.currentList">
+      <ion-select-option value="playLaterGames">
+        Play later
+      </ion-select-option>
+      <ion-select-option value="currentlyPlayingGames">
+        Playing
+      </ion-select-option>
+      <ion-select-option value="playedGame"> Played </ion-select-option>
+      <ion-select-option value="completedGames">
+        Finished
+      </ion-select-option>
+    </ion-select>
+    <ion-button slot="end" (click)="AddToList()">
+      <ion-icon
+        menu="first-menu"
+        name="checkmark-outline"
+        size="large"
+      ></ion-icon>
+    </ion-button>
+  </ion-item>
 </ion-content>

@@ -99,7 +99,6 @@ export class RegisterComponent implements OnInit {
       formData.append('email', user.email);
       formData.append('password', user.password);
       formData.append('password_confirmation', user.passwordConfirmation);
-  
       // If the avatar is a base64 string, convert it to a Blob
       if (user.avatar) {
         const blob = this.dataURLToBlob(user.avatar);
@@ -112,10 +111,6 @@ export class RegisterComponent implements OnInit {
           console.log('User created:', createdUser);
           this.cancel();
           this.router.navigate(['./games-list']);
-
-          //this is needed to correctly create the gamingLists
-          this.GamingList.id = undefined;
-          this.GamingList.userId = createdUser.id;
         },
         error: (error) => {
           console.error('Error creating user:', error);

@@ -28,6 +28,10 @@
       <ion-label position="floating">Password</ion-label>
       <ion-input formControlName="password" type="password" required></ion-input>
     </ion-item>
+    <ion-item class="steelBlueColor">
+      <ion-label position="floating">Confirm password</ion-label>
+      <ion-input formControlName="passwordConfirmation" type="password" required></ion-input>
+    </ion-item>
 
     <ion-button expand="full" type="submit" [disabled]="!registrationForm.valid"
      class="safetyOrangeBackground orangeActivated">

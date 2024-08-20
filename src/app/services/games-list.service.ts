@@ -68,20 +68,8 @@ export class GamesListService {
     return this.http.delete(`${this.API_URL}/gamesList/${gameId}`);
   }
 
-  /* Gaming Lists */
-  getUserGamesList(listType: string, ): Observable<Array<Game>> {
-    return this.http.get<Array<Game>>(`${this.API_URL}/${listType}`);
-  }
-  getUserGamesListByUserId(userId: string, listType: string|undefined): Observable<any> {
-    return this.http.get<any>(`${this.API_URL}/${listType}`, {
-      params: { userId }
-    }).pipe(
-      catchError(error => {
-        console.error('Error fetching user games list:', error);
-        return throwError(error);
-      })
-    );
-  }
+
+
   postGameToList(userGamingList: UserGamingList, listType: string): Observable<UserGamingList> {
     return this.http.post<UserGamingList>(`${this.API_URL}/${listType}`, userGamingList).pipe(
       catchError(error => {
@@ -90,16 +78,18 @@ export class GamesListService {
       })
     );
   }
-  putGameToList(userGamingList: UserGamingList, listType: string): Observable<UserGamingList> {
-    return this.http.put<UserGamingList>(`${this.API_URL}/${listType}/${userGamingList.id}`, userGamingList).pipe(
-      catchError(error => {
-        console.error('Error updating user gaming list:', error);
-        return throwError(error);
-      })
-    );
-  }
-  removeGameFromList(gameId: string, listType: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/${listType}/${gameId}`).pipe(
+
+  removeGameFromLists(gameId: string): Observable<any> {
+    const userJson = sessionStorage.getItem('user');
+    let headers = new HttpHeaders({
+    });  
+
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      headers = headers.set('Authorization', `Bearer ${user.token}`);
+    }
+
+    return this.http.delete(`${this.API_URL}/deleteGameFromLists/${gameId}`, {headers}).pipe(
       catchError(error => {
         console.error('Error removing game:', error);
         return throwError(error);
@@ -107,37 +97,9 @@ export class GamesListService {
     );
   }
 
-  async findGameList(gameId: string, userId: string): Promise<string> {
-    const listTypes = [
-      'usersListPlayLater',
-      'usersListCurrentlyPlaying',
-      'usersListPlayed',
-      'usersListCompleted'
-    ];
 
-    for (const listType of listTypes) {
-      const response = await this.getUserGamesListByUserId(userId, listType).toPromise();
-      if (response.games.some((game: any) => game.gameId === gameId)) {
-        return listType.split('/').pop() || 'Not found';
-      }
-    }
 
-    return 'Not found';
-  }
 
-  async removeGameFromAllLists(gameId: string, userId: string): Promise<void> {
-    const listTypes = [
-      'usersListPlayLater',
-      'usersListCurrentlyPlaying',
-      'usersListPlayed',
-      'usersListCompleted'
-    ];
-
-    // Fetch and update the record for each list
-    await Promise.all(listTypes.map(listType =>
-      this.updateRecordRemovingGame(gameId, userId, listType)
-    ));
-  }
   private async updateRecordRemovingGame(gameId: string, userId: string, listType: string): Promise<void> {
     try {
       // Fetch the current record
@@ -160,5 +122,30 @@ export class GamesListService {
     } catch {
       // Silently ignore any errors
     }
+  }
+
+  putGameToList(game:any, gamingListName:string){
+    const userJson = sessionStorage.getItem('user');
+    let headers = new HttpHeaders({
+    });  
+
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      headers = headers.set('Authorization', `Bearer ${user.token}`);
+    }
+
+    return this.http.post<any>(`${this.API_URL}/${gamingListName}`, game, {headers})
+  }
+  getUserGamesList( gamingListName:string){
+    const userJson = sessionStorage.getItem('user');
+    let headers = new HttpHeaders({
+    });  
+
+    if (userJson) {
+      const user = JSON.parse(userJson);
+      headers = headers.set('Authorization', `Bearer ${user.token}`);
+    }
+
+    return this.http.get<any>(`${this.API_URL}/${gamingListName}`, {headers})
   }
 }

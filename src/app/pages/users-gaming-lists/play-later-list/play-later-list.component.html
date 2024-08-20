@@ -35,19 +35,25 @@
       <div class="flex-col-center">
         <span class="title">{{ item.title }}</span>
         <div class="space-between">
-          <span class="">Platform: {{ item.platform }}</span>
+          <span class="">Platform: {{ item.platforms.join(', ') }}</span>
           <span class="">RD: {{ item.release_date }}</span>
         </div>
-        <span>{{item.genre}}</span>
+        <span>{{item.genres.join(', ')}}</span>
       </div>
     </ion-card-content>
   </ion-card>
   <ion-item>
     <ion-label>Remove game from list</ion-label>
-    <ion-button (click)="removeGameFromList(item.id, 'usersListPlayLater')">
+    <ion-button [id]="'open-action-sheet-' + item.id">
       Remove
     </ion-button>
   </ion-item>
+  <ion-action-sheet
+  [trigger]="'open-action-sheet-' + item.id"
+  header="Are you sure you want to remove the game from the list?"
+  [buttons]="actionSheetButtons"
+  (didDismiss)="confirmDelete($event, item.id)"
+ ></ion-action-sheet>
   }
 
 </ion-content>

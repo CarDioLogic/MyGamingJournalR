@@ -35,17 +35,18 @@
   <ion-card class="" [routerLink]="['/game-description', item.id]">
     <ion-img [src]="item.thumbnail"></ion-img>
     <ion-card-content>
-      <div class="flex-col-center">
+      <div class="flex-col-start">
         <span class="title">{{ item.title }}</span>
+        <span class="">RD: {{ item.release_date }}</span>
+
         <div class="space-between">
-          <span class="">Platform: {{ item.platform }}</span>
-          <span class="">RD: {{ item.release_date }}</span>
+          <span class="">Platform: {{ item.platforms?.join(', ') }}</span>
         </div>
-        <span>{{ item.genre }}</span>
+        <span>Genres: {{ item.genres?.join(', ') }}</span>
       </div>
     </ion-card-content>
   </ion-card>
-  <ion-item>
+<!--   <ion-item>
     <ion-label>Gaming list:</ion-label>
     <ion-select placeholder="Add" [(ngModel)]="item.currentList">
       <ion-select-option value="usersListPlayLater">
@@ -66,7 +67,7 @@
         size="large"
       ></ion-icon>
     </ion-button>
-  </ion-item>
+  </ion-item> -->
   }
 
   <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">

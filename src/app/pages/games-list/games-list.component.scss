@@ -31,11 +31,11 @@ ion-icon {
     --placeholder-color:var(--SteelBlue);
   }
 
-.flex-col-center {
+.flex-col-start {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: start;
 }
 .title {
   font-size: 2rem;

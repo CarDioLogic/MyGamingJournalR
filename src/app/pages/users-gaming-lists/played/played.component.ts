@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Route, Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { GamesListService } from 'src/app/services/games-list.service';
 import { Game } from 'src/app/models/game';
-import { IonToast, ToastController, IonMenuButton, IonHeader, IonToolbar, IonTitle, IonContent, IonRefresher, IonRefresherContent, IonCard, IonImg, IonCardContent, IonIcon, IonFabButton, IonFab, IonInfiniteScroll, IonInfiniteScrollContent, IonMenu, IonButtons, IonButton, IonSearchbar, IonItem, IonFooter, IonLabel } from '@ionic/angular/standalone';
+import { IonToast, ToastController, IonMenuButton, IonHeader, IonToolbar, IonTitle, IonContent, IonRefresher, IonRefresherContent, IonCard, IonImg, IonCardContent, IonIcon, IonFabButton, IonFab, IonInfiniteScroll, IonInfiniteScrollContent, IonMenu, IonButtons, IonButton, IonSearchbar, IonItem, IonFooter, IonLabel, IonActionSheet } from '@ionic/angular/standalone';
 import { FilterMenuComponent } from 'src/app/components/filter-menu/filter-menu.component';
 import { FilterParams } from 'src/app/models/filterParams';
 import { AuthService } from 'src/app/services/auth.service';
@@ -12,7 +12,7 @@ import { UserGamingList } from 'src/app/models/userGamingList';
 
 @Component({
   standalone: true,
-  imports: [IonLabel,IonToast, IonFooter, IonItem, IonSearchbar, FormsModule, RouterLink, CommonModule,
+  imports: [IonActionSheet, IonLabel,IonToast, IonFooter, IonItem, IonSearchbar, FormsModule, RouterLink, CommonModule,
     IonHeader, IonToolbar, IonTitle, IonContent, IonRefresher, IonRefresherContent, IonCard, IonImg, IonCardContent, IonIcon, IonButtons, IonButton,
     IonFab, IonFabButton, IonInfiniteScroll, IonInfiniteScrollContent, IonMenu, FilterMenuComponent, IonMenuButton
   ],
@@ -48,24 +48,66 @@ export class PlayedComponent  implements OnInit {
       console.error('No logged-in user found.');
     }
   }
+  public actionSheetButtons = [
+    {
+      text: 'Delete',
+      role: 'destructive',
+      data: {
+        action: 'delete',
+      },
+    },
+    {
+      text: 'Cancel',
+      role: 'cancel',
+      data: {
+        action: 'cancel',
+      },
+    },
+  ];
+  confirmDelete(ev: any, id:string) {
+    if (ev.detail.role === 'destructive') {
+      this.removeGameFromList(id);
+    }
+  }
+
+  removeGameFromList(id: string) {
+    this.gamesService.removeGameFromLists(id).subscribe({
+      next: (response:any)=>{
+        this.TriggerToast('Game removed from list', true);
+        this.filteredGames = this.filteredGames.filter(game => game.id !== id);
+
+      },
+      error: (err) =>{
+        this.TriggerToast('Error removing game from list.', false);
+      }
+    })
+  }
+
 
   loadGames() {
-    this.gamesService.getUserGamesListByUserId(this.user.id, 'usersListPlayed').subscribe({
+    this.gamesService.getUserGamesList('playedGame').subscribe({
       next: (response: any) => {
-        this.GamingList = response[0];
-        console.log(this.GamingList)
+        console.log('GAMES LIST', response);
+        this.games = response.map((result: any) => ({
+          id: result.games.id as string,
+          title: result.games.title as string,
+          thumbnail: result.games.thumbnail as string,
+          release_date: result.games.release_date as string,
 
-          this.GamingList.games.forEach(game => {
-            this.addGameToGamesList(game.gameId);
-          });
-  
+
+          genres: result.games.genres.map((genreObj: any) => genreObj.name),
+          platforms: result.games.platforms.map(
+            (platformObj: any) => platformObj.name
+          ),
+        }));
+        this.filteredGames = [...this.games];
       },
       error: (err) => {
         console.error('Error loading gaming list', err);
       },
       complete: () => {
         console.log(this.games);
-      }
+      },
     });
   }
 /*   this.filteredGames = [...this.games];
@@ -120,33 +162,14 @@ export class PlayedComponent  implements OnInit {
       this.applyFilters();
     }
     applyFilters(): void {
-      this.filteredGames = this.games.filter(game => {
+/*       this.filteredGames = this.games.filter(game => {
         const matchesSearchQuery = !this.searchGameTitleQuery || game.title.toLowerCase().includes(this.searchGameTitleQuery);
         const matchesGenre = !this.filter?.genre || game.genre === this.filter.genre;
         const matchesPlatform = !this.filter?.platform || game.platform === this.filter.platform;
         return matchesSearchQuery && matchesGenre && matchesPlatform;
-      });
+      }); */
     }
-    removeGameFromList(gameId:string, listName:string){
-      this.GamingList.games = this.GamingList.games.filter(game => game.gameId !== gameId);
-
-      // Optionally, update the filteredGames if you are using it for display
-      this.filteredGames = this.filteredGames.filter(game => game.id !== gameId);
-      this.games = this.games.filter(game => game.id !== gameId);
-
-      this.gamesService.putGameToList(this.GamingList, 'usersListPlayed').subscribe({
-        next: (response: any) => {
-          this.TriggerToast(`Removed game from list`, true);
-
-        },
-        error: (err) => {
-          this.TriggerToast(`Error removing game from list`, false);
-        },
-        complete: () => {
-          console.log(this.games);
-        }
-      });
-    }
+   
 
     async TriggerToast(toastMessage: string, isToastSuccess: boolean | null) {
       let toastCssClass = '';
