@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { IonicModule } from '@ionic/angular';
 import { AuthService } from '../../services/auth.service'; // Adjust the path as needed
@@ -16,6 +16,7 @@ import { Route, Router, ActivatedRoute, RouterLink } from '@angular/router';
 export class UserMenuComponent implements OnInit {
   @ViewChild(IonModal) modal!: IonModal; // Use definite assignment assertion
 
+  @Input({ required: true }) menuIdentifier: string = 'games';
   user: any;
 
   constructor(

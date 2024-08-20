@@ -40,19 +40,17 @@ ion-toolbar, ion-tab-bar {
     --color: var(--AliceBlue);
   }
   ion-menu{
-    margin-top: 10em;
     z-index: 9999;
   }
 
-.border-radius-top{
-  overflow: hidden;
+ion-tab-bar{
   border-top-right-radius: 1rem;
-  border-top-left-radius: 10px;
+  border-top-left-radius: 1rem;
 }
 .border-radius-bellow{
     overflow: hidden;
     border-bottom-right-radius: 1rem;
-    border-bottom-left-radius: 10px;
+    border-bottom-left-radius: 1rem;
 }
 /* toast styles */
 .neutral-toast{

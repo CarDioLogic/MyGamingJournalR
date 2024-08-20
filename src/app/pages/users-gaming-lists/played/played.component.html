@@ -1,14 +1,16 @@
-<ion-menu menuId="first-menu_later" side="end" contentId="main-content">
+<ion-menu menuId="first-menu_played" side="end" contentId="main-content">
   <app-filter-menu (orderParameter)="orderGames($event)"  (filterParameter)="filterGames($event)"></app-filter-menu>
 </ion-menu>
 
 
 <ion-header translucent="true">
+  <app-user-menu *ngIf="isAuth()" menuIdentifier="played"></app-user-menu>
+
   <ion-toolbar class="steelBlueBackground">
     <ion-title>Played List</ion-title>
     <ion-buttons slot="end">
     
-      <ion-menu-button menu="first-menu_later">
+      <ion-menu-button menu="first-menu_played">
         <ion-icon name="options-outline" size="large" class="whiteColor"></ion-icon>
       </ion-menu-button>
 

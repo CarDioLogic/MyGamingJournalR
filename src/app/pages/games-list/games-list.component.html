@@ -6,6 +6,8 @@
 </ion-menu>
 
 <ion-header translucent="true" class="border-radius-bellow">
+  <app-user-menu *ngIf="isAuth()" menuIdentifier="games"></app-user-menu>
+
   <ion-toolbar class="steelBlueBackground">
     <ion-title>Games List</ion-title>
     <ion-buttons slot="end">

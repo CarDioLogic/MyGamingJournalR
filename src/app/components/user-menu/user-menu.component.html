@@ -17,13 +17,13 @@
           <h2 class="user-name">{{ user.name }}</h2>
         </div>
       </div>
-      <ion-button slot="" fill="clear" id="open-modal">
+      <ion-button slot="" fill="clear" [id]="menuIdentifier">
         <ion-icon name="settings-outline"></ion-icon>
       </ion-button>
     </ion-row>
   </ion-grid>
 </ion-toolbar>
-<ion-modal trigger="open-modal">
+<ion-modal [trigger]="menuIdentifier">
   <ng-template>
     <ion-header>
       <ion-toolbar>

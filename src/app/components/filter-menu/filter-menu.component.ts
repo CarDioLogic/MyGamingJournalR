@@ -143,15 +143,6 @@ export class FilterMenuComponent implements OnInit {
   }
 
   emitFilterParams() {
-/*     if (Array.isArray(this.selectedFilterParams.platform)) {
-      this.selectedFilterParams.platform.name = this.selectedFilterParams.platform.join(',');
-    }
-
-    if (Array.isArray(this.selectedFilterParams.genre)) {
-      this.selectedFilterParams.genre.name =
-        this.selectedFilterParams.genre.join(',');
-    } */
-
     console.log("EMITED FILTER:", this.selectedFilterParams)
     this.filterParameter.emit(this.selectedFilterParams);
   }

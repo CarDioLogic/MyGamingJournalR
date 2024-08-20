@@ -38,9 +38,11 @@ import { UserGamingList } from 'src/app/models/userGamingList';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { UserMenuComponent } from 'src/app/components/user-menu/user-menu.component';
 @Component({
   standalone: true,
   imports: [
+    UserMenuComponent,
     IonLabel,
     IonToast,
     IonFooter,
@@ -98,7 +100,9 @@ export class GamesListComponent implements OnInit {
     this.handleRefresh();
     this.user = this.authService.getLoggedInUser();
   }
-
+  isAuth() {
+    return this.authService.isAuthenticated();
+  }
   loadGames() {
     this.page = 1;
     this.rawgService

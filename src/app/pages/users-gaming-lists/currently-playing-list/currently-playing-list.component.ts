@@ -33,10 +33,11 @@ import { FilterParams } from 'src/app/models/filterParams';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserGamingList } from 'src/app/models/userGamingList';
 import { ToastService } from 'src/app/services/toast.service';
+import { UserMenuComponent } from 'src/app/components/user-menu/user-menu.component';
 
 @Component({
   standalone: true,
-  imports: [IonActionSheet, 
+  imports: [IonActionSheet, UserMenuComponent,
     IonLabel,
     IonToast,
     IonFooter,
@@ -90,7 +91,9 @@ export class CurrentlyPlayingListComponent implements OnInit {
       console.error('No logged-in user found.');
     }
   }
-
+  isAuth() {
+    return this.authService.isAuthenticated();
+  }
   public actionSheetButtons = [
     {
       text: 'Delete',
@@ -195,25 +198,37 @@ export class CurrentlyPlayingListComponent implements OnInit {
       a.release_date.localeCompare(b.release_date)
     );
   }
-  /*   searchGameByTitle(){
-  //opted to search for the game title locally instead of searching trough api request
-  //api does not support partial matching, so the title had to be exactly the same as the one in the DB
-    console.log("Filter by title:", this.searchGameTitleQuery);
-    this.games = [];
-    this.handleRefresh();
-  } */
+
 
   onSearchInput(event: any): void {
     this.searchGameTitleQuery = event.target.value.toLowerCase();
     this.applyFilters();
   }
   applyFilters(): void {
-    /*       this.filteredGames = this.games.filter(game => {
-        const matchesSearchQuery = !this.searchGameTitleQuery || game.title.toLowerCase().includes(this.searchGameTitleQuery);
-        const matchesGenre = !this.filter?.genre || game.genres === this.filter.genre;
-        const matchesPlatform = !this.filter?.platform || game.platform === this.filter.platform;
-        return matchesSearchQuery && matchesGenre && matchesPlatform;
-      }); */
+    this.filteredGames = this.games.filter((game) => {
+      const matchesSearchQuery =
+        !this.searchGameTitleQuery ||
+        game.title
+          .toLowerCase()
+          .includes(this.searchGameTitleQuery.toLowerCase());
+
+      const matchesGenre =
+        !this.filter?.genres ||
+        this.filter.genres.length === 0 ||
+        this.filter.genres.some((genre) => game.genres?.includes(genre.name));
+
+      const matchesPlatform =
+        !this.filter?.platforms ||
+        this.filter.platforms.length === 0 ||
+        this.filter.platforms.some((platform) =>
+          game.platforms?.includes(platform.name)
+        );
+
+      console.log('genres', matchesGenre);
+      console.log('platforms', matchesPlatform);
+
+      return matchesSearchQuery && matchesGenre && matchesPlatform;
+    });
   }
   
 
