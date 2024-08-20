@@ -6,7 +6,6 @@ import { GamesListService } from 'src/app/services/games-list.service';
 import { RawgService } from 'src/app/services/rawg.service';
 import { Game } from 'src/app/models/game';
 import {
-  ToastController,
   IonToast,
   IonSelect,
   IonSelectOption,
@@ -35,11 +34,10 @@ import {
 } from '@ionic/angular/standalone';
 import { FilterMenuComponent } from 'src/app/components/filter-menu/filter-menu.component';
 import { FilterParams } from 'src/app/models/filterParams';
-
 import { UserGamingList } from 'src/app/models/userGamingList';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
-
+import { ToastService } from 'src/app/services/toast.service';
 @Component({
   standalone: true,
   imports: [
@@ -83,12 +81,6 @@ export class GamesListComponent implements OnInit {
   filter: FilterParams | undefined;
   searchGameTitleQuery: string | undefined;
 
-  GamingList: UserGamingList = {
-    id: '',
-    userId: '',
-    games: [],
-  };
-
   page: number = 1; //do i need this ?
   maxPages: number = 0; //do i need this ?
   itemsPerPage: number = 10;
@@ -98,8 +90,8 @@ export class GamesListComponent implements OnInit {
   constructor(
     private gamesService: GamesListService,
     private rawgService: RawgService,
-    private toastController: ToastController,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -113,8 +105,8 @@ export class GamesListComponent implements OnInit {
       .getGamesPaginate(
         this.page,
         this.itemsPerPage,
-        this.filter?.platform,
-        this.filter?.genre,
+        this.filter?.platforms.map((platform: { id: any }) => platform.id).join(', '),
+        this.filter?.genres.map((genre: { id: any }) => genre.id).join(', '),
         this.searchGameTitleQuery
       )
       .subscribe({
@@ -122,14 +114,16 @@ export class GamesListComponent implements OnInit {
           console.log(response);
 
           this.nextPageUrl = response.next;
-          
+
           this.games = response.results.map((result: any) => ({
             id: result.id as string,
             title: result.name as string,
             thumbnail: result.background_image as string,
             release_date: result.released as string,
-            genres: result.genres.map((genreObj: any) => genreObj.name) , 
-            platforms: result.platforms.map((platformObj: any) => platformObj.platform.name) ,  
+            genres: result.genres.map((genreObj: any) => genreObj.name),
+            platforms: result.platforms.map(
+              (platformObj: any) => platformObj.platform.name
+            ),
           }));
 
           this.filteredGames = [...this.games];
@@ -149,18 +143,18 @@ export class GamesListComponent implements OnInit {
   }
 
   onIonInfinite(event: any): void {
-
     this.page++;
     this.rawgService
       .getGamesPaginate(
         this.page,
         this.itemsPerPage,
-        this.filter?.platform,
-        this.filter?.genre,
+        this.filter?.platforms.map((platform: { id: any }) => platform.id).join(', '),
+        this.filter?.genres.map((genre: { id: any }) => genre.id).join(', '),
         this.searchGameTitleQuery
       )
       .subscribe({
         next: (response: any) => {
+          //response.next gives the request url to get items of the next page
           //when there are no more pages, end!
           if (response.next == null) {
             event.target.complete();
@@ -174,7 +168,6 @@ export class GamesListComponent implements OnInit {
             title: result.name as string,
             thumbnail: result.background_image as string,
             release_date: result.released as string,
-
           }));
           this.filteredGames.push(...this.games);
 
@@ -182,35 +175,6 @@ export class GamesListComponent implements OnInit {
         },
       });
   }
-
-/*       onIonInfinite(event: any): void {
-        this.rawgService.changePage(this.nextPageUrl).subscribe({
-          next: (response: any) => {
-
-            if (response.next == null) {
-              event.target.complete();
-              return;
-            }
-            this.nextPageUrl = response.next;
-            console.log('nextPage', this.nextPageUrl)
-
-            this.games = response.results.map((result: any) => ({
-              id: result.id as string,
-              title: result.name as string,
-              thumbnail: result.background_image as string,
-              release_date: result.released as string,
-            }));
-            this.filteredGames.push(...this.games);
-      
-            event.target.complete();
-          },
-          error: (err) => {
-            console.error(err);
-            event.target.complete();
-          }
-        });
-      } */
-      
 
   trackByIndex(index: number, item: Game) {
     return index;
@@ -247,85 +211,9 @@ export class GamesListComponent implements OnInit {
 
   onSearchInput(event: any): void {
     this.searchGameTitleQuery = event.target.value;
-    //to search games on local list only
-    /*     this.filteredGames = this.games.filter((game) =>
-      game.title.toLowerCase().includes(searchTerm)
-    ); */
   }
 
   onSearchEnter() {
     this.loadGames();
   }
-
-  async AddToList(game: Game) {
-    console.log("game to add to list",game);
-
-    let gameToAddToList = {
-
-    };
-
-    if (!game.currentList) {
-      this.TriggerToast(`No list selected`, false);
-      return;
-    }
-
-
-    const gameExists = this.GamingList.games.some(
-      (existingGame) => existingGame.gameId === game.id
-    );
-
-    if (gameExists) {
-      this.TriggerToast(`Game already exists in the list`, null);
-    } else {
-      this.GamingList.games.push({
-        gameId: game.id,
-        createDate: new Date().toISOString(),
-      });
-
-      console.log('Updated GamingList:', this.GamingList);
-
-      this.gamesService
-        .putGameToList(this.GamingList, game.currentList)
-        .subscribe(
-          (response) => {
-            this.TriggerToast(`Lists updated!`, true);
-
-            console.log('Game successfully added:', response);
-          },
-          (error) => {
-            this.TriggerToast(`Error adding game to list`, false);
-          }
-        );
-    }
-  }
-
-
-
-  async TriggerToast(toastMessage: string, isToastSuccess: boolean | null) {
-    let toastCssClass = '';
-    if (isToastSuccess === true) {
-      toastCssClass = 'success-toast';
-    } else if (isToastSuccess === false) {
-      toastCssClass = 'error-toast';
-    } else {
-      toastCssClass = 'neutral-toast';
-    }
-
-    const toast = await this.toastController.create({
-      cssClass: toastCssClass,
-      message: toastMessage,
-      position: 'top',
-      duration: 2000,
-      buttons: [
-        {
-          text: 'Close',
-          role: 'cancel',
-        },
-      ],
-    });
-    toast.present();
-  }
-
-
-
 }

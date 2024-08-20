@@ -1,4 +1,6 @@
+import { Genre } from "./genre"
+import { Platform } from "./platform"
 export interface FilterParams{
-    genre:string,
-    platform:string,
+    genres: Array<Genre>,
+    platforms: Array<Platform>,
 }

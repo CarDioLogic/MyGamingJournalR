@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
   ModalController,
-  ToastController,
   IonHeader,
   IonToolbar,
   IonTitle,
@@ -28,6 +27,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { UserGamingList } from 'src/app/models/userGamingList';
 import { GamesListService } from 'src/app/services/games-list.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -54,17 +54,12 @@ import { AuthService } from 'src/app/services/auth.service';
 export class RegisterComponent implements OnInit {
   registrationForm!: FormGroup;
   imageUrl: string = '../../../assets/icon/profileIcon.png'; //set a value for a default image that should in assets!!!!
-  GamingList: UserGamingList = {
-    id: '',
-    userId: '',
-    games: [],
-  };
   user: any = '';
 
   constructor(
     private modalCtrl: ModalController,
     private router: Router,
-    private toastController: ToastController,
+    private toastService: ToastService,
     private usersService: UsersService,
     private fb: FormBuilder,
     private gamesListService: GamesListService,
@@ -91,7 +86,8 @@ export class RegisterComponent implements OnInit {
   createUser() {
     const user = this.registrationForm.value;
 
-    if (this.registrationForm.valid &&
+    if (
+      this.registrationForm.valid &&
       user.password === user.passwordConfirmation
     ) {
       const formData = new FormData();
@@ -105,7 +101,6 @@ export class RegisterComponent implements OnInit {
         formData.append('profile_image', blob, 'profile_image.jpg');
       }
 
-
       this.authService.createUser(formData).subscribe({
         next: (createdUser) => {
           console.log('User created:', createdUser);
@@ -114,14 +109,12 @@ export class RegisterComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error creating user:', error);
-          this.TriggerToast('Error creating user!', false);
+          this.toastService.TriggerToast('Error creating user!', false);
         },
-        complete: () => {
-          this.CreateGamingListsForUser();
-        },
+        complete: () => {},
       });
     } else {
-      this.TriggerToast('Passwords must match!', false)
+      this.toastService.TriggerToast('Passwords must match!', false);
     }
   }
 
@@ -136,31 +129,6 @@ export class RegisterComponent implements OnInit {
     return new Blob([ab], { type: mimeString });
   }
 
-
-  async TriggerToast(toastMessage: string, isToastSuccess: boolean | null) {
-    let toastCssClass = '';
-    if (isToastSuccess === true) {
-      toastCssClass = 'success-toast';
-    } else if (isToastSuccess === false) {
-      toastCssClass = 'error-toast';
-    } else {
-      toastCssClass = 'neutral-toast';
-    }
-
-    const toast = await this.toastController.create({
-      cssClass: toastCssClass,
-      message: toastMessage,
-      position: 'top',
-      duration: 2000,
-      buttons: [
-        {
-          text: 'Close',
-          role: 'cancel',
-        },
-      ],
-    });
-    toast.present();
-  }
   openCamera() {
     const takePicture = async () => {
       const image = await Camera.getPhoto({
@@ -175,27 +143,5 @@ export class RegisterComponent implements OnInit {
       this.registrationForm.controls['avatar'].setValue(this.imageUrl);
     };
     takePicture();
-  }
-
-  CreateGamingListsForUser() {
-    console.log(this.GamingList);
-
-    this.createGamingList('usersListPlayLater');
-    this.createGamingList('usersListCurrentlyPlaying');
-    this.createGamingList('usersListPlayed');
-    this.createGamingList('usersListCompleted');
-
-  }
-
-  createGamingList(listName:string){
-    this.gamesListService
-      .postGameToList(this.GamingList, listName)
-      .subscribe(
-        (response) => {
-          console.log('Game list successfully added:', response);
-        },
-        (error) => {
-        }
-      );
   }
 }

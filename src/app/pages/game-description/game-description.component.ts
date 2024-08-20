@@ -1,11 +1,9 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Route, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { Game } from 'src/app/models/game';
 import { GamesListService } from 'src/app/services/games-list.service';
 import {
-  ToastController,
   IonFooter,
   IonBackButton,
   IonMenuButton,
@@ -29,15 +27,19 @@ import {
   IonSearchbar,
   IonSelect,
   IonSelectOption,
-  IonItem, IonLabel } from '@ionic/angular/standalone';
+  IonItem,
+  IonLabel,
+} from '@ionic/angular/standalone';
 import { RawgService } from 'src/app/services/rawg.service';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   standalone: true,
-  imports: [IonLabel, 
+  imports: [
+    IonLabel,
     FormsModule,
     CommonModule,
     IonSelect,
@@ -82,16 +84,15 @@ export class GameDescriptionComponent implements OnInit {
     developers: [],
     release_date: '',
     freetogame_profile_url: '',
-    store: []
+    store: [],
   };
 
   constructor(
     private route: ActivatedRoute,
     private gamesService: GamesListService,
     private rawgService: RawgService,
-    private toastController: ToastController,
-    private authService:AuthService
-
+    private authService: AuthService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -101,100 +102,56 @@ export class GameDescriptionComponent implements OnInit {
     });
   }
 
-
   async AddToList() {
-
     let gameToAddToList = {
-      "rawgApiId": `${this.game.id}`,
-      "title": this.game.title,
-      "thumbnail": this.game.thumbnail,
-      "short_description": this.game.short_description,
-      "game_site_url": this.game.game_url,
-      "game_img_url": this.game.thumbnail,
-      "release_date": this.game.release_date,
-      "genres": this.game.genres,
-      "platforms": this.game.platforms,
-      "publishers": this.game.publishers,
-/*       developers: this.game.developers */
+      rawgApiId: `${this.game.id}`,
+      title: this.game.title,
+      thumbnail: this.game.thumbnail,
+      short_description: this.game.short_description,
+      game_site_url: this.game.game_url,
+      game_img_url: this.game.thumbnail,
+      release_date: this.game.release_date,
+      genres: this.game.genres,
+      platforms: this.game.platforms,
+      publishers: this.game.publishers,
+      /*       developers: this.game.developers */
     };
 
-    console.log("game to add to list", gameToAddToList);
-
     if (!this.game.currentList) {
-      this.TriggerToast(`No list selected`, false);
+      this.toastService.TriggerToast(`No list selected`, false);
       return;
     }
 
     this.gamesService
-    .putGameToList(gameToAddToList, this.game.currentList)
-    .subscribe(
-      (response) => {
-        this.TriggerToast(`Lists updated!`, true);
+      .putGameToList(gameToAddToList, this.game.currentList)
+      .subscribe(
+        (response) => {
+          this.toastService.TriggerToast(`Lists updated!`, true);
 
-        console.log('Game successfully added:', response);
-      },
-      (error) => {
-        this.TriggerToast(`Error adding game to list`, false);
-      }
-    );
-
-/*     
-    const gameExists = this.GamingList.games.some(
-      (existingGame) => existingGame.gameId === game.id
-    );
-
-    if (gameExists) {
-      this.TriggerToast(`Game already exists in the list`, null);
-    } else {
-      this.GamingList.games.push({
-        gameId: game.id,
-        createDate: new Date().toISOString(),
-      });
-
-      console.log('Updated GamingList:', this.GamingList);
-    } */
-  }
-
-
-  async TriggerToast(toastMessage: string, isToastSuccess: boolean | null) {
-    let toastCssClass = '';
-    if (isToastSuccess === true) {
-      toastCssClass = 'success-toast';
-    } else if (isToastSuccess === false) {
-      toastCssClass = 'error-toast';
-    } else {
-      toastCssClass = 'neutral-toast';
-    }
-
-    const toast = await this.toastController.create({
-      cssClass: toastCssClass,
-      message: toastMessage,
-      position: 'top',
-      duration: 2000,
-      buttons: [
-        {
-          text: 'Close',
-          role: 'cancel',
+          console.log('Game successfully added:', response);
         },
-      ],
-    });
-    toast.present();
+        (error) => {
+          this.toastService.TriggerToast(`Error adding game to list`, false);
+        }
+      );
   }
 
   loadGame() {
     this.rawgService.getGameById(this.game.id).subscribe({
       next: (response: any) => {
-        console.log("this is the response", response);
+        console.log('this is the response', response);
 
         this.game = {
           ...this.game,
           id: response.id as string,
           title: response.name as string,
           thumbnail: response.background_image as string,
-/*           short_description: response.description_raw,
- */          release_date: response.released as string,
-          genres: response.genres.map((genre: any) => genre.name) , 
-          platforms: response.platforms.map((platformObj: any) => platformObj.platform.name) ,  
+          //short_description: response.description_raw,
+          release_date: response.released as string,
+          genres: response.genres.map((genre: any) => genre.name),
+          platforms: response.platforms.map(
+            (platformObj: any) => platformObj.platform.name
+          ),
           publishers: response.publishers.map((pub: any) => pub.name),
           developers: response.developers.map((dev: any) => dev.name),
           game_url: response.website,
@@ -205,7 +162,7 @@ export class GameDescriptionComponent implements OnInit {
             storeUrl: 'http://' + storeElement.store.domain,
           });
         });
-        console.log(this.game)
+        console.log(this.game);
       },
       error: (err) => {
         console.error('Error loading games', err);

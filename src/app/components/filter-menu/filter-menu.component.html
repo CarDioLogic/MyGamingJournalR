@@ -33,11 +33,11 @@
       multiple="true"
 
         placeholder="Select Platform"
-        [(ngModel)]="selectedFilterParams.platform"
+        [(ngModel)]="selectedFilterParams.platforms"
       >
         <ion-select-option
           *ngFor="let platform of platforms"
-          [value]="platform.id"
+          [value]="platform"
         >
           {{ platform.name }}
         </ion-select-option>
@@ -48,9 +48,9 @@
         multiple="true"
         [interfaceOptions]="{ cssClass: 'alert' }"
         placeholder="Select Genre"
-        [(ngModel)]="selectedFilterParams.genre"
+        [(ngModel)]="selectedFilterParams.genres"
       >
-        <ion-select-option *ngFor="let genre of genres" [value]="genre.id">
+        <ion-select-option *ngFor="let genre of genres" [value]="genre">
           {{ genre.name }}
         </ion-select-option>
       </ion-select>

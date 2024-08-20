@@ -49,7 +49,7 @@ export class HomePage implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private gamesService: GamesListService,
+    private gamesService: GamesListService
   ) {}
 
   async openRegisterModal() {

@@ -6,7 +6,6 @@ import { GamesListService } from 'src/app/services/games-list.service';
 import { Game } from 'src/app/models/game';
 import {
   IonToast,
-  ToastController,
   IonMenuButton,
   IonHeader,
   IonToolbar,
@@ -32,7 +31,7 @@ import {
 import { FilterMenuComponent } from 'src/app/components/filter-menu/filter-menu.component';
 import { FilterParams } from 'src/app/models/filterParams';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserGamingList } from 'src/app/models/userGamingList';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   standalone: true,
@@ -79,7 +78,7 @@ export class FinishedListComponent implements OnInit {
   constructor(
     private gamesService: GamesListService,
     private authService: AuthService,
-    private toastController: ToastController
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -116,12 +115,12 @@ export class FinishedListComponent implements OnInit {
   removeGameFromList(id: string) {
     this.gamesService.removeGameFromLists(id).subscribe({
       next: (response:any)=>{
-        this.TriggerToast('Game removed from list', true);
+        this.toastService.TriggerToast('Game removed from list', true);
         this.filteredGames = this.filteredGames.filter(game => game.id !== id);
 
       },
       error: (err) =>{
-        this.TriggerToast('Error removing game from list.', false);
+        this.toastService.TriggerToast('Error removing game from list.', false);
       }
     })
   }
@@ -170,7 +169,6 @@ export class FinishedListComponent implements OnInit {
   }
 
   filterGames(event: FilterParams) {
-    console.log('filter:', event);
     this.filter = event;
     this.applyFilters();
   }
@@ -208,37 +206,23 @@ export class FinishedListComponent implements OnInit {
     this.applyFilters();
   }
   applyFilters(): void {
-    /*       this.filteredGames = this.games.filter(game => {
-        const matchesSearchQuery = !this.searchGameTitleQuery || game.title.toLowerCase().includes(this.searchGameTitleQuery);
-        const matchesGenre = !this.filter?.genre || game.genre === this.filter.genre;
-        const matchesPlatform = !this.filter?.platform || game.platform === this.filter.platform;
+    this.filteredGames = this.games.filter(game => {
+        const matchesSearchQuery = !this.searchGameTitleQuery || 
+            game.title.toLowerCase().includes(this.searchGameTitleQuery.toLowerCase());
+
+        const matchesGenre = !this.filter?.genres || 
+            this.filter.genres.length === 0 || 
+            this.filter.genres.some(genre => game.genres?.includes(genre.name));
+
+        const matchesPlatform = !this.filter?.platforms || 
+            this.filter.platforms.length === 0 || 
+            this.filter.platforms.some(platform => game.platforms?.includes(platform.name));
+
+        console.log("genres", matchesGenre);
+        console.log("platforms", matchesPlatform);
+        
         return matchesSearchQuery && matchesGenre && matchesPlatform;
-      }); */
-  }
-
-
-  async TriggerToast(toastMessage: string, isToastSuccess: boolean | null) {
-    let toastCssClass = '';
-    if (isToastSuccess === true) {
-      toastCssClass = 'success-toast';
-    } else if (isToastSuccess === false) {
-      toastCssClass = 'error-toast';
-    } else {
-      toastCssClass = 'neutral-toast';
-    }
-
-    const toast = await this.toastController.create({
-      cssClass: toastCssClass,
-      message: toastMessage,
-      position: 'top',
-      duration: 2000,
-      buttons: [
-        {
-          text: 'Close',
-          role: 'cancel',
-        },
-      ],
     });
-    toast.present();
-  }
+}
+
 }

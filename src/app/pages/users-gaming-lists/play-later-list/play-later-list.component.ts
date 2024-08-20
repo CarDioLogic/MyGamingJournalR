@@ -8,8 +8,7 @@ import { IonToast, ToastController, IonMenuButton, IonHeader, IonToolbar, IonTit
 import { FilterMenuComponent } from 'src/app/components/filter-menu/filter-menu.component';
 import { FilterParams } from 'src/app/models/filterParams';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserGamingList } from 'src/app/models/userGamingList';
-
+import { ToastService } from 'src/app/services/toast.service';
 @Component({
   standalone: true,
   imports: [IonActionSheet, IonLabel,IonToast, IonFooter, IonItem, IonSearchbar, FormsModule, RouterLink, CommonModule,
@@ -26,17 +25,11 @@ export class PlayLaterListComponent  implements OnInit {
   filter: FilterParams | undefined;
   searchGameTitleQuery:string | undefined;
   user:any;
-  GamingList: UserGamingList = {
-    id: '',
-    userId: '',
-    games: [],
-  };
 
   constructor(
     private gamesService: GamesListService,
     private authService: AuthService,
-    private toastController: ToastController,
-
+    private toastService: ToastService
   ) {}
 
 
@@ -73,12 +66,12 @@ export class PlayLaterListComponent  implements OnInit {
   removeGameFromList(id: string) {
     this.gamesService.removeGameFromLists(id).subscribe({
       next: (response:any)=>{
-        this.TriggerToast('Game removed from list', true);
+        this.toastService.TriggerToast('Game removed from list', true);
         this.filteredGames = this.filteredGames.filter(game => game.id !== id);
 
       },
       error: (err) =>{
-        this.TriggerToast('Error removing game from list.', false);
+        this.toastService.TriggerToast('Error removing game from list.', false);
       }
     })
   }
@@ -170,29 +163,4 @@ export class PlayLaterListComponent  implements OnInit {
       }); */
     }
     
-
-    async TriggerToast(toastMessage: string, isToastSuccess: boolean | null) {
-      let toastCssClass = '';
-      if (isToastSuccess === true) {
-        toastCssClass = 'success-toast';
-      } else if (isToastSuccess === false) {
-        toastCssClass = 'error-toast';
-      } else {
-        toastCssClass = 'neutral-toast';
-      }
-  
-      const toast = await this.toastController.create({
-        cssClass: toastCssClass,
-        message: toastMessage,
-        position: 'top',
-        duration: 2000,
-        buttons: [
-          {
-            text: 'Close',
-            role: 'cancel',
-          },
-        ],
-      });
-      toast.present();
-    }
 }
