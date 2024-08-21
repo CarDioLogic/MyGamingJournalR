@@ -23,15 +23,15 @@ This app also consumes the [MyGamingJournalAPI](https://github.com/CarDioLogic/M
 
 ## Screenshots
 ### Homepage
-![Games List](https://github.com/CarDioLogic/MyGamingJournalR/blob/master/screenshots/gameDetails.PNG)
-### Login
-![Games List](https://github.com/CarDioLogic/MyGamingJournalR/tree/master/screenshots/gamesList.PNG)
-### Consult data
-![ConsultData](https://github.com/CarDioLogic/benchmarking-hospitalar-project/blob/main/Screenshots/ConsultData.PNG)
-### Insert data
-![InsertData](https://github.com/CarDioLogic/benchmarking-hospitalar-project/blob/main/Screenshots/InsertData.PNG)
-### Create user
-![CreateUser](https://github.com/CarDioLogic/benchmarking-hospitalar-project/blob/main/Screenshots/CreateUser.PNG)
+![Homepage](https://github.com/CarDioLogic/MyGamingJournalR/blob/master/screenshots/homepage.PNG)
+### User profile
+![User profile](https://github.com/CarDioLogic/MyGamingJournalR/blob/master/screenshots/userProfile.PNG)
+### Games list
+![Games List](https://github.com/CarDioLogic/MyGamingJournalR/blob/master/screenshots/gamesList.PNG)
+### Game details
+![Game details](https://github.com/CarDioLogic/MyGamingJournalR/blob/master/screenshots/gameDetails.PNG)
+### User games list
+![User games list](https://github.com/CarDioLogic/MyGamingJournalR/blob/master/screenshots/userGamesList.PNG)
 
 ## Author:
 - [João Silva](https://github.com/CarDioLogic)
