@@ -23,7 +23,7 @@ This app also consumes the [MyGamingJournalAPI](https://github.com/CarDioLogic/M
 
 ## Screenshots
 ### Homepage
-![Games List](https://github.com/CarDioLogic/MyGamingJournalR/blob/main/screenshots/gamesList.PNG)
+![Games List](https://github.com/CarDioLogic/MyGamingJournalR/blob/master/screenshots/gameDetails.PNG)
 ### Login
 ![Games List](https://github.com/CarDioLogic/MyGamingJournalR/tree/master/screenshots/gamesList.PNG)
 ### Consult data
