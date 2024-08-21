@@ -1,7 +1,7 @@
 # MyGamingJournal app
 
 ## Description
-An app to manage all the games you play by distributing them in different lists (currently playing, play later, played and finished). The app makes use of the [RAWG api](https://rawg.io/) to get all the games information it needs from their extensive database.
+A mobile app to manage all the games you play by distributing them in different lists (currently playing, play later, played and finished). The app makes use of the [RAWG api](https://rawg.io/) to get all the games information it needs from their extensive database.
 This app also consumes the [MyGamingJournalAPI](https://github.com/CarDioLogic/MyGamingJournalAPI) that stores all data related to the users and their gaming lists.
 
 ## Features
@@ -12,6 +12,7 @@ This app also consumes the [MyGamingJournalAPI](https://github.com/CarDioLogic/M
 
 ## Technologies Used
 - Angular, Typescript
+- ionic
 - HTML, CSS
 
 ## Usage
