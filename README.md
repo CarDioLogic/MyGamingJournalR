@@ -23,9 +23,9 @@ This app also consumes the [MyGamingJournalAPI](https://github.com/CarDioLogic/M
 
 ## Screenshots
 ### Homepage
-![Homepage](https://github.com/CarDioLogic/benchmarking-hospitalar-project/blob/main/Screenshots/Homepage.PNG)
+![Games List](https://github.com/CarDioLogic/MyGamingJournalR/Screenshots/gamesList.PNG)
 ### Login
-![Login](https://github.com/CarDioLogic/benchmarking-hospitalar-project/blob/main/Screenshots/Login.PNG)
+![Games List](https://github.com/CarDioLogic/MyGamingJournalR/Screenshots/gamesList.PNG)
 ### Consult data
 ![ConsultData](https://github.com/CarDioLogic/benchmarking-hospitalar-project/blob/main/Screenshots/ConsultData.PNG)
 ### Insert data
