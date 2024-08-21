@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import {
   ModalController,
   ToastController,
@@ -28,10 +30,10 @@ import { UserGamingList } from 'src/app/models/userGamingList';
 import { GamesListService } from 'src/app/services/games-list.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
-
+import { UserMenuComponent } from 'src/app/components/user-menu/user-menu.component';
 @Component({
   standalone: true,
-  imports: [IonActionSheet, 
+  imports: [IonActionSheet, UserMenuComponent, CommonModule,
     IonToast,
     ReactiveFormsModule,
     IonInput,
@@ -76,7 +78,9 @@ export class UserHomepageComponent implements OnInit {
     await this.getUser();
     this.populateFormWithUserData();
   }
-
+  isAuth() {
+    return this.authService.isAuthenticated();
+  }
   public actionSheetButtons = [
     {
       text: 'Delete',

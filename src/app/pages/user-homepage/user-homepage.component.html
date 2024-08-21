@@ -1,9 +1,12 @@
 <ion-header translucent="true">
+  <app-user-menu *ngIf="isAuth()" menuIdentifier="games"></app-user-menu>
+
   <ion-toolbar class="steelBlueBackground" >
     <ion-title class="aliceBlueColor" >Profile</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding flex-col-center">
+  
   <form (ngSubmit)="updateUser()" [formGroup]="registrationForm">
     <div class="flex-col-center">
       <div class="avatarProfile">

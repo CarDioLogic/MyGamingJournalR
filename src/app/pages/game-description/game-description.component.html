@@ -1,4 +1,6 @@
 <ion-header translucent="true">
+  <app-user-menu *ngIf="isAuth()" menuIdentifier="games"></app-user-menu>
+
   <ion-toolbar class="steelBlueBackground">
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>

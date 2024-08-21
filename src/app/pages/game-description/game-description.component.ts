@@ -35,11 +35,11 @@ import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
-
+import { UserMenuComponent } from 'src/app/components/user-menu/user-menu.component';
 @Component({
   standalone: true,
   imports: [
-    IonLabel,
+    IonLabel,UserMenuComponent,
     FormsModule,
     CommonModule,
     IonSelect,
@@ -101,7 +101,9 @@ export class GameDescriptionComponent implements OnInit {
       this.loadGame();
     });
   }
-
+  isAuth() {
+    return this.authService.isAuthenticated();
+  }
   async AddToList() {
     let gameToAddToList = {
       rawgApiId: `${this.game.id}`,
